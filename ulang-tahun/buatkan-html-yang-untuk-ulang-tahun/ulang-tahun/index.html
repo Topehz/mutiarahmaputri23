@@ -1,0 +1,981 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Happy Birthday</title>
+  <style>
+    :root {
+      --bg-a: #fff7df;
+      --bg-b: #ffd2e1;
+      --bg-c: #bde7ff;
+      --ink: #302834;
+      --muted: #756777;
+      --card: rgba(255, 255, 255, 0.82);
+      --accent: #e84f83;
+      --accent-2: #ffb84d;
+      --accent-3: #4ba3e3;
+      --shadow: 0 24px 80px rgba(74, 48, 78, 0.22);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 12% 15%, rgba(255, 255, 255, 0.86), transparent 28%),
+        radial-gradient(circle at 86% 12%, rgba(255, 184, 77, 0.38), transparent 26%),
+        linear-gradient(135deg, var(--bg-a), var(--bg-b) 48%, var(--bg-c));
+    }
+
+    button {
+      font: inherit;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    .screen {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 26px 16px;
+      position: relative;
+      isolation: isolate;
+    }
+
+    .card {
+      width: min(100%, 460px);
+      border: 1px solid rgba(255, 255, 255, 0.74);
+      border-radius: 26px;
+      background: var(--card);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      backdrop-filter: blur(16px);
+    }
+
+    .intro {
+      display: grid;
+      gap: 22px;
+      padding: 28px;
+      text-align: center;
+    }
+
+    .intro h1 {
+      font-size: clamp(2.25rem, 10vw, 4rem);
+      line-height: 0.95;
+      letter-spacing: 0;
+    }
+
+    .intro p,
+    .slide-text {
+      color: var(--muted);
+      line-height: 1.68;
+    }
+
+    .music-player {
+      display: grid;
+      grid-template-columns: 58px 1fr;
+      gap: 14px;
+      align-items: center;
+      padding: 12px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.64);
+      text-align: left;
+    }
+
+    .disc {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle, #fff 0 10%, transparent 11%),
+        conic-gradient(from 120deg, #e84f83, #ffb84d, #53a8e8, #9a7bff, #e84f83);
+      box-shadow: inset 0 0 0 8px rgba(255, 255, 255, 0.28);
+      animation: spin 5s linear infinite paused;
+    }
+
+    .playing .disc {
+      animation-play-state: running;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .player-label {
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .song-title {
+      margin: 4px 0 8px;
+      font-weight: 900;
+    }
+
+    .bar {
+      height: 7px;
+      overflow: hidden;
+      border-radius: 99px;
+      background: rgba(47, 41, 51, 0.12);
+    }
+
+    .bar span {
+      display: block;
+      width: 38%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      animation: progress 3.5s ease-in-out infinite alternate paused;
+    }
+
+    .playing .bar span {
+      animation-play-state: running;
+    }
+
+    @keyframes progress {
+      to {
+        width: 88%;
+      }
+    }
+
+    .button {
+      border: 0;
+      min-height: 48px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 900;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+    }
+
+    .primary {
+      color: white;
+      background: linear-gradient(135deg, var(--accent), #fd7f8e);
+      box-shadow: 0 12px 26px rgba(232, 79, 131, 0.3);
+    }
+
+    .secondary {
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.74);
+    }
+
+    .story {
+      display: none;
+      width: min(100%, 520px);
+    }
+
+    .story.show {
+      display: block;
+      animation: pop 520ms cubic-bezier(.17,.84,.44,1) both;
+    }
+
+    @keyframes pop {
+      from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.96);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .top-photo {
+      min-height: 286px;
+      display: grid;
+      place-items: end start;
+      padding: 24px;
+      color: white;
+      background:
+        linear-gradient(180deg, transparent 34%, rgba(0, 0, 0, 0.48)),
+        var(--main-photo),
+        linear-gradient(135deg, #ffb84d, #e84f83, #53a8e8);
+      background-size: cover;
+      background-position: center;
+    }
+
+    .top-photo h2 {
+      font-size: clamp(2.15rem, 10vw, 4.25rem);
+      line-height: 0.93;
+      text-shadow: 0 8px 26px rgba(0, 0, 0, 0.32);
+    }
+
+    .slide {
+      display: none;
+      min-height: 320px;
+      padding: 24px;
+    }
+
+    .slide.active {
+      display: grid;
+      gap: 18px;
+      align-content: center;
+      animation: fadeSlide 360ms ease both;
+    }
+
+    @keyframes fadeSlide {
+      from {
+        opacity: 0;
+        transform: translateX(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .slide h3 {
+      font-size: clamp(1.55rem, 6vw, 2.4rem);
+      line-height: 1;
+    }
+
+    .message {
+      min-height: 178px;
+      padding: 20px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.72);
+      color: #423743;
+      line-height: 1.75;
+      white-space: pre-line;
+    }
+
+    .message::after {
+      content: "|";
+      display: inline-block;
+      margin-left: 2px;
+      color: var(--accent);
+      animation: blink 900ms steps(2, start) infinite;
+    }
+
+    .message.done::after {
+      content: "";
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0;
+      }
+    }
+
+    .mini-gallery {
+      display: grid;
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 12px;
+      min-height: 270px;
+    }
+
+    .mini-photo,
+    .photo-tile {
+      border-radius: 20px;
+      background:
+        linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.22)),
+        var(--gallery-photo, var(--main-photo)),
+        linear-gradient(135deg, #ffb84d, #53a8e8);
+      background-size: cover;
+      background-position: center;
+    }
+
+    .photo-stack {
+      display: grid;
+      gap: 12px;
+    }
+
+    .photo-tile:nth-child(1) {
+      background-position: center 35%;
+    }
+
+    .photo-tile:nth-child(2) {
+      background-position: center 68%;
+    }
+
+    .wish-list {
+      display: grid;
+      gap: 12px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .wish-list li {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 12px;
+      align-items: center;
+      padding: 13px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.68);
+      color: #493e4a;
+      line-height: 1.45;
+    }
+
+    .wish-list span {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: white;
+      background: linear-gradient(135deg, var(--accent-3), var(--accent));
+      font-weight: 900;
+    }
+
+    .cake {
+      width: min(100%, 260px);
+      height: 210px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .candle {
+      width: 14px;
+      height: 54px;
+      position: absolute;
+      left: 50%;
+      top: 6px;
+      transform: translateX(-50%);
+      border-radius: 8px;
+      background: repeating-linear-gradient(45deg, #fff 0 8px, #e84f83 8px 16px);
+    }
+
+    .flame {
+      width: 28px;
+      height: 38px;
+      position: absolute;
+      left: 50%;
+      top: -34px;
+      transform: translateX(-50%);
+      border-radius: 50% 50% 50% 10%;
+      background: linear-gradient(#fff6a8, #ff9f1c 65%, #e84f83);
+      animation: flame 900ms ease-in-out infinite alternate;
+    }
+
+    .cake.blown .flame {
+      opacity: 0;
+      transform: translateX(-50%) scale(0.2);
+      animation: none;
+      transition: opacity 420ms ease, transform 420ms ease;
+    }
+
+    @keyframes flame {
+      to {
+        transform: translateX(-50%) scale(0.9) rotate(6deg);
+      }
+    }
+
+    .cake-body {
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: 240px;
+      height: 122px;
+      transform: translateX(-50%);
+      border-radius: 24px 24px 18px 18px;
+      background: linear-gradient(180deg, #ff8fab 0 34%, #ffd166 34% 62%, #7bdff2 62%);
+      box-shadow: inset 0 -16px rgba(0, 0, 0, 0.08);
+    }
+
+    .cake-body::before {
+      content: "";
+      position: absolute;
+      inset: -26px 18px auto;
+      height: 48px;
+      border-radius: 999px;
+      background: #fff;
+      box-shadow: 0 18px 0 rgba(255, 255, 255, 0.78);
+    }
+
+    .final-title {
+      text-align: center;
+      font-size: clamp(2rem, 9vw, 3.6rem);
+      line-height: 0.98;
+    }
+
+    .mic-panel {
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.68);
+    }
+
+    .mic-meter {
+      height: 12px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(48, 40, 52, 0.13);
+    }
+
+    .mic-meter span {
+      display: block;
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent-3), var(--accent-2), var(--accent));
+      transition: width 80ms linear;
+    }
+
+    .mic-status {
+      min-height: 22px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.45;
+      text-align: center;
+    }
+
+    .video-box {
+      display: grid;
+      gap: 14px;
+    }
+
+    .birthday-video {
+      width: 100%;
+      aspect-ratio: 9 / 16;
+      max-height: 430px;
+      border: 0;
+      border-radius: 20px;
+      background:
+        linear-gradient(135deg, rgba(232, 79, 131, 0.18), rgba(83, 168, 232, 0.2)),
+        rgba(255, 255, 255, 0.62);
+      object-fit: cover;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.62);
+    }
+
+    .video-empty {
+      display: grid;
+      place-items: center;
+      min-height: 270px;
+      padding: 22px;
+      border-radius: 20px;
+      color: var(--muted);
+      line-height: 1.6;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.68);
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 0 24px 24px;
+    }
+
+    .progress-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 18px 24px 0;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: rgba(48, 40, 52, 0.2);
+    }
+
+    .dot.active {
+      width: 25px;
+      border-radius: 99px;
+      background: var(--accent);
+    }
+
+    .confetti {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    .piece {
+      position: absolute;
+      top: -24px;
+      width: 10px;
+      height: 16px;
+      border-radius: 2px;
+      opacity: 0.9;
+      animation: fall linear forwards;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translate3d(var(--drift), 112vh, 0) rotate(720deg);
+      }
+    }
+
+    .balloon {
+      position: fixed;
+      bottom: -90px;
+      width: 54px;
+      height: 68px;
+      border-radius: 50% 50% 46% 46%;
+      opacity: 0.72;
+      z-index: -1;
+      animation: floatUp 12s ease-in infinite;
+    }
+
+    .balloon::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 64px;
+      width: 1px;
+      height: 70px;
+      background: rgba(47, 41, 51, 0.18);
+    }
+
+    .balloon:nth-child(1) {
+      left: 8%;
+      background: #ff8fab;
+      animation-delay: 0s;
+    }
+
+    .balloon:nth-child(2) {
+      left: 78%;
+      background: #6ec6ff;
+      animation-delay: 2.8s;
+    }
+
+    .balloon:nth-child(3) {
+      left: 48%;
+      background: #ffd166;
+      animation-delay: 5.4s;
+    }
+
+    @keyframes floatUp {
+      to {
+        transform: translateY(-125vh) translateX(18px);
+      }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 430px) {
+      .intro,
+      .slide {
+        padding: 20px;
+      }
+
+      .top-photo {
+        min-height: 236px;
+        padding: 20px;
+      }
+
+      .actions {
+        grid-template-columns: 1fr;
+        padding: 0 20px 20px;
+      }
+
+      .mini-gallery {
+        min-height: 235px;
+        grid-template-columns: 1fr;
+      }
+
+      .photo-stack {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!--
+    CARA EDIT CEPAT:
+    Ganti isi DATA_ULANG_TAHUN di bawah.
+    Foto dan musik harus satu folder dengan index.html.
+    Contoh:
+    photo: "mutia 2.jpeg",
+    music: "mutia.mp3",
+  -->
+
+  <div class="confetti" id="confetti"></div>
+  <div class="balloon"></div>
+  <div class="balloon"></div>
+  <div class="balloon"></div>
+
+  <main class="screen">
+    <section class="card intro" id="intro">
+      <div class="music-player" id="playerCard">
+        <div class="disc" aria-hidden="true"></div>
+        <div>
+          <p class="player-label">Music Player</p>
+          <p class="song-title" id="songTitle">Lagu ulang tahun</p>
+          <div class="bar" aria-hidden="true"><span></span></div>
+        </div>
+      </div>
+
+      <h1 id="introTitle">Gift For You!</h1>
+      <p id="introText">Ada pesan kecil yang cuma boleh dibuka sama kamu.</p>
+      <button class="button primary" id="openButton" type="button">OPEN</button>
+    </section>
+
+    <section class="story" id="story">
+      <article class="card">
+        <div class="top-photo" id="topPhoto">
+          <h2 id="birthdayTitle">Happy Birthday!</h2>
+        </div>
+
+        <div class="progress-dots" id="dots"></div>
+
+        <section class="slide active" data-slide="message">
+          <h3 id="messageTitle">Pesan kecil</h3>
+          <p class="message" id="messageBox"></p>
+        </section>
+
+        <section class="slide" data-slide="gallery">
+          <h3 id="galleryTitle">Cantiknya hari ini</h3>
+          <div class="mini-gallery" aria-label="Galeri foto">
+            <div class="mini-photo"></div>
+            <div class="photo-stack">
+              <div class="photo-tile"></div>
+              <div class="photo-tile"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide" data-slide="wishes">
+          <h3 id="wishTitle">Doa buat kamu</h3>
+          <ul class="wish-list" id="wishList"></ul>
+        </section>
+
+        <section class="slide" data-slide="cake">
+          <div class="cake" id="cake" aria-hidden="true">
+            <div class="candle"><div class="flame"></div></div>
+            <div class="cake-body"></div>
+          </div>
+          <h3 class="final-title" id="finalTitle">Make a wish!</h3>
+          <p class="slide-text" id="finalText"></p>
+          <div class="mic-panel">
+            <button class="button secondary" id="micButton" type="button">Nyalakan Mic</button>
+            <div class="mic-meter" aria-hidden="true"><span id="micLevel"></span></div>
+            <p class="mic-status" id="micStatus">Tekan tombol mic, lalu tiup ke arah mikrofon.</p>
+          </div>
+        </section>
+
+        <section class="slide" data-slide="video">
+          <h3 id="videoTitle">Video buat kamu</h3>
+          <div class="video-box">
+            <video class="birthday-video" id="birthdayVideo" controls playsinline></video>
+            <p class="video-empty hidden" id="videoEmpty">Masukkan file video ke folder ini, lalu isi bagian video di DATA_ULANG_TAHUN.</p>
+          </div>
+        </section>
+
+        <div class="actions">
+          <button class="button secondary" id="backButton" type="button">Kembali</button>
+          <button class="button primary" id="nextButton" type="button">Lanjut</button>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <audio id="music" preload="auto" loop></audio>
+
+  <script>
+    const DATA_ULANG_TAHUN = {
+      nama: "Mutia yang CANTIKKKK",
+      judulAwal: "Gift For You!",
+      teksAwal: "Ada pesan kecil yang cuma boleh dibuka sama kamu.",
+      judulUcapan: "Happy Birthday!",
+      judulLagu: "Intro - Nadin Amizah",
+      photo: "mutia 2.jpeg",
+      music: "mutia.mp3",
+      video: "mutia.mp4",
+      galeri: [
+        "mutia 4.jpeg",
+        "mutia 5.jpeg",
+        "mutia 6.jpeg"
+      ],
+
+      judulPesan: "Pesan kecil",
+      pesan: `Dear Mutia yang cantik,
+
+Selamat ulang tahun ya!
+Hi by, udah lama kita gak ketemu yaa semoga kamu disana baik-baik aja. hari ini kamu
+udah nyentuh 23 di ulang tahun yang hampir 1/4 abad ini aku pengen bilang makasih yaa.
+
+Semoga hari ini penuh hal baik, senyum yang banyak, dan doa-doa yang pelan-pelan jadi nyata.
+
+Terima kasih juga sudah jadi orang yang kuat, hangat, dan berharga.
+Semoga tahun ini membawa lebih banyak bahagia untuk kamu.
+
+Terus bersinar by - Adde`,
+
+      judulGaleri: "Cantiknya hari ini",
+      judulDoa: "Doa buat kamu",
+      doa: [
+        "Semoga sehat selalu dan dijauhkan dari hal-hal yang bikin lelah.",
+        "Semoga rezekinya lancar, hatinya tenang, senyumnya makin sering, dan bahagia terus.",
+        "Semoga semua yang kamu perjuangkan pelan-pelan sampai ke tujuan sampe ke europe AMINNN."
+      ],
+
+      judulAkhir: "Make a wish!",
+      teksAkhir: "Tekan tombol mic, tiup lilinnya, lalu lanjut ke video terakhir:D.",
+      judulVideo: "Video buat kamu"
+    };
+
+    const intro = document.querySelector("#intro");
+    const story = document.querySelector("#story");
+    const openButton = document.querySelector("#openButton");
+    const backButton = document.querySelector("#backButton");
+    const nextButton = document.querySelector("#nextButton");
+    const micButton = document.querySelector("#micButton");
+    const micLevel = document.querySelector("#micLevel");
+    const micStatus = document.querySelector("#micStatus");
+    const cake = document.querySelector("#cake");
+    const birthdayVideo = document.querySelector("#birthdayVideo");
+    const videoEmpty = document.querySelector("#videoEmpty");
+    const messageBox = document.querySelector("#messageBox");
+    const confetti = document.querySelector("#confetti");
+    const music = document.querySelector("#music");
+    const playerCard = document.querySelector("#playerCard");
+    const slides = Array.from(document.querySelectorAll(".slide"));
+    const dots = document.querySelector("#dots");
+    let currentSlide = 0;
+    let typedOnce = false;
+    let candleBlown = false;
+    let micStarted = false;
+    let audioContext;
+    let micStream;
+
+    document.title = `Happy Birthday ${DATA_ULANG_TAHUN.nama}`;
+    document.querySelector("#introTitle").textContent = DATA_ULANG_TAHUN.judulAwal;
+    document.querySelector("#introText").textContent = DATA_ULANG_TAHUN.teksAwal;
+    document.querySelector("#birthdayTitle").textContent = DATA_ULANG_TAHUN.judulUcapan;
+    document.querySelector("#songTitle").textContent = DATA_ULANG_TAHUN.judulLagu;
+    document.querySelector("#messageTitle").textContent = DATA_ULANG_TAHUN.judulPesan;
+    document.querySelector("#galleryTitle").textContent = DATA_ULANG_TAHUN.judulGaleri;
+    document.querySelector("#wishTitle").textContent = DATA_ULANG_TAHUN.judulDoa;
+    document.querySelector("#finalTitle").textContent = DATA_ULANG_TAHUN.judulAkhir;
+    document.querySelector("#finalText").textContent = DATA_ULANG_TAHUN.teksAkhir;
+    document.querySelector("#videoTitle").textContent = DATA_ULANG_TAHUN.judulVideo;
+
+    const photoValue = DATA_ULANG_TAHUN.photo
+      ? `url("${DATA_ULANG_TAHUN.photo}")`
+      : "linear-gradient(135deg, rgba(255,184,77,.9), rgba(232,79,131,.85), rgba(83,168,232,.85))";
+
+    document.documentElement.style.setProperty("--main-photo", photoValue);
+    document.querySelectorAll(".mini-photo, .photo-tile").forEach((item, index) => {
+      const galleryPhoto = DATA_ULANG_TAHUN.galeri[index] || DATA_ULANG_TAHUN.photo;
+      if (galleryPhoto) item.style.setProperty("--gallery-photo", `url("${galleryPhoto}")`);
+    });
+    if (DATA_ULANG_TAHUN.music) music.src = DATA_ULANG_TAHUN.music;
+    if (DATA_ULANG_TAHUN.video) {
+      birthdayVideo.src = DATA_ULANG_TAHUN.video;
+    } else {
+      birthdayVideo.classList.add("hidden");
+      videoEmpty.classList.remove("hidden");
+    }
+
+    DATA_ULANG_TAHUN.doa.forEach((text, index) => {
+      const item = document.createElement("li");
+      item.innerHTML = `<span>${index + 1}</span><p>${text}</p>`;
+      document.querySelector("#wishList").appendChild(item);
+    });
+
+    slides.forEach((_, index) => {
+      const dot = document.createElement("span");
+      dot.className = index === 0 ? "dot active" : "dot";
+      dots.appendChild(dot);
+    });
+
+    function typeMessage(text) {
+      let index = 0;
+      messageBox.textContent = "";
+      messageBox.classList.remove("done");
+
+      const write = () => {
+        messageBox.textContent = text.slice(0, index);
+        index += 1;
+
+        if (index <= text.length) {
+          window.setTimeout(write, 30);
+        } else {
+          messageBox.classList.add("done");
+          typedOnce = true;
+        }
+      };
+
+      write();
+    }
+
+    function showSlide(index) {
+      currentSlide = Math.max(0, Math.min(index, slides.length - 1));
+      slides.forEach((slide, slideIndex) => {
+        slide.classList.toggle("active", slideIndex === currentSlide);
+      });
+      Array.from(dots.children).forEach((dot, dotIndex) => {
+        dot.classList.toggle("active", dotIndex === currentSlide);
+      });
+
+      backButton.textContent = currentSlide === 0 ? "Ulangi" : "Kembali";
+      nextButton.textContent = currentSlide === slides.length - 1 ? "Surprise Lagi" : "Lanjut";
+
+      if (currentSlide === 0 && !typedOnce) {
+        typeMessage(DATA_ULANG_TAHUN.pesan);
+      }
+
+      if (slides[currentSlide].dataset.slide === "cake") {
+        startConfetti(130);
+      }
+
+      if (slides[currentSlide].dataset.slide === "video") {
+        if (DATA_ULANG_TAHUN.video) birthdayVideo.play().catch(() => {});
+      } else {
+        birthdayVideo.pause();
+      }
+    }
+
+    function blowCandle() {
+      if (candleBlown) return;
+      candleBlown = true;
+      cake.classList.add("blown");
+      micStatus.textContent = "Yeay, lilinnya padam! Sekarang boleh lanjut ke video.";
+      micLevel.style.width = "100%";
+      startConfetti(150);
+    }
+
+    async function startMic() {
+      if (candleBlown) {
+        micStatus.textContent = "Lilinnya sudah padam. Lanjut ke video ya.";
+        return;
+      }
+
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        micStatus.textContent = "Browser ini belum mendukung mikrofon. Coba buka lewat Chrome di HP.";
+        return;
+      }
+
+      if (micStarted) {
+        micStatus.textContent = "Mic sudah aktif. Tiup agak dekat ke mikrofon.";
+        return;
+      }
+
+      try {
+        micStarted = true;
+        micStatus.textContent = "Mic aktif. Tiup agak kencang ke mikrofon.";
+        micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const source = audioContext.createMediaStreamSource(micStream);
+        const analyser = audioContext.createAnalyser();
+        analyser.fftSize = 1024;
+        source.connect(analyser);
+
+        const data = new Uint8Array(analyser.fftSize);
+        let strongBlowFrames = 0;
+
+        const listen = () => {
+          if (candleBlown) return;
+
+          analyser.getByteTimeDomainData(data);
+          let sum = 0;
+          for (let i = 0; i < data.length; i += 1) {
+            const value = (data[i] - 128) / 128;
+            sum += value * value;
+          }
+
+          const volume = Math.sqrt(sum / data.length);
+          const percent = Math.min(100, Math.round(volume * 360));
+          micLevel.style.width = `${percent}%`;
+
+          if (volume > 0.18) {
+            strongBlowFrames += 1;
+          } else {
+            strongBlowFrames = Math.max(0, strongBlowFrames - 1);
+          }
+
+          if (strongBlowFrames > 5) {
+            blowCandle();
+            return;
+          }
+
+          requestAnimationFrame(listen);
+        };
+
+        listen();
+      } catch (error) {
+        micStarted = false;
+        micStatus.textContent = "Mic belum diizinkan. Pilih Allow/Izinkan mikrofon, lalu coba lagi.";
+      }
+    }
+
+    function startConfetti(amount = 90) {
+      const colors = ["#e84f83", "#ffb84d", "#53a8e8", "#9a7bff", "#65d68a"];
+      confetti.innerHTML = "";
+
+      for (let i = 0; i < amount; i += 1) {
+        const piece = document.createElement("span");
+        piece.className = "piece";
+        piece.style.left = `${Math.random() * 100}%`;
+        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.animationDuration = `${2.2 + Math.random() * 2.8}s`;
+        piece.style.animationDelay = `${Math.random() * 0.6}s`;
+        piece.style.setProperty("--drift", `${-80 + Math.random() * 160}px`);
+        confetti.appendChild(piece);
+      }
+
+      window.setTimeout(() => {
+        confetti.innerHTML = "";
+      }, 5600);
+    }
+
+    async function playMusic() {
+      if (!DATA_ULANG_TAHUN.music) return;
+
+      try {
+        await music.play();
+        playerCard.classList.add("playing");
+      } catch (error) {
+        playerCard.classList.remove("playing");
+      }
+    }
+
+    openButton.addEventListener("click", () => {
+      intro.classList.add("hidden");
+      story.classList.add("show");
+      typedOnce = false;
+      showSlide(0);
+      startConfetti();
+      playMusic();
+    });
+
+    backButton.addEventListener("click", () => {
+      if (currentSlide === 0) {
+        typedOnce = false;
+        typeMessage(DATA_ULANG_TAHUN.pesan);
+      } else {
+        showSlide(currentSlide - 1);
+      }
+    });
+
+    nextButton.addEventListener("click", () => {
+      if (currentSlide === slides.length - 1) {
+        startConfetti(160);
+      } else {
+        showSlide(currentSlide + 1);
+      }
+    });
+
+    micButton.addEventListener("click", startMic);
+  </script>
+</body>
+</html>
